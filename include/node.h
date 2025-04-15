@@ -9,6 +9,11 @@ public:
 	Node(const string& data, bool isQuestion) : m_data(data), m_yes(nullptr), m_no(nullptr), m_isQuestion(isQuestion) {}
 	bool isLeaf();
 
+	Node* getYes() { return m_yes; }
+	void setYes(Node* yes) { m_yes = yes; }
+	Node* getNo() { return m_no; }
+	void setNo(Node* no) { m_no = no; }
+
 private:
 	string m_data;	// la pregunta o resposta del node en el que estem
 	Node* m_yes;	// branca per la resposta si
