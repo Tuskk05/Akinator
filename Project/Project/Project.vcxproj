@@ -19,9 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\akinatorTree.h" />
     <ClInclude Include="..\..\include\node.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\akinatorTree.cpp" />
     <ClCompile Include="..\..\src\node.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

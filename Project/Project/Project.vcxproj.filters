@@ -18,9 +18,15 @@
     <ClInclude Include="..\..\include\node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\akinatorTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\akinatorTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
