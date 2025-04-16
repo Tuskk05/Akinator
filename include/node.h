@@ -13,6 +13,10 @@ public:
 	void setYes(Node* yes) { m_yes = yes; }
 	Node* getNo() { return m_no; }
 	void setNo(Node* no) { m_no = no; }
+	bool getIsQuestion() { return m_isQuestion; }
+	void setIsQuestion(bool isQuestion) { m_isQuestion = isQuestion; }
+	string getData() { return m_data; }
+	void setData(string data) { m_data = data; }
 
 private:
 	string m_data;	// la pregunta o resposta del node en el que estem
