@@ -1,4 +1,7 @@
 #include "../include/akinatorTree.h"
+#include <windows.h>
+
+using namespace std;
 
 void akinatorTree::deleteTree(Node* node)
 {
@@ -61,36 +64,162 @@ void akinatorTree::printTree()
 	print(m_root, 0);
 }
 
-void main()
+bool akinatorTree::isCurrentLeaf()
 {
-	akinatorTree tree;
+	return m_currentNode && m_currentNode->isLeaf();
+}
 
-	Node* root = new Node("Es un pokemon?", true);
-	Node* yes = new Node("Es de tipus terra?", true);
-	Node* no = new Node("Coquito", false);
-	Node* yes2 = new Node("Ryhorn", false);
-	Node* no2 = new Node("Charmander", false);
+void akinatorTree::resetCurrentNode()
+{
+	m_currentNode = m_root;
+}
 
-	root->setYes(yes);
-	root->setNo(no);
-	yes->setYes(yes2);
-	yes->setNo(no2);
-
-	tree.setRoot(root);
-	tree.setTreeSize(4);
-	tree.setCurrentNode(root);
-
-	cout << "L'arbre inicial es:" << endl;
-	tree.printTree();
-	tree.clear();
-
-	cout << "L'arbre netejat es:" << endl;
-	if ((tree.getRoot() == nullptr) && (tree.getCurrentNode() == nullptr) && (tree.getTreeSize() == 0))
+void akinatorTree::moveToYes()
+{
+	if (m_currentNode)	//m_currentNode != nullptr
 	{
-		cout << "La neteja ha estat un exit!" << endl;
+		m_currentNode = m_currentNode->getYes();
+	}
+}
+
+void akinatorTree::moveToNo()
+{
+	if (m_currentNode)	//m_currentNode != nullptr
+	{
+		m_currentNode = m_currentNode->getNo();
+	}
+}
+
+void akinatorTree::askQuestion(Node* node)
+{
+	cout << node->getData() << endl;
+}
+
+void akinatorTree::findNextNode(bool answer)
+{
+	if (answer)
+	{
+		m_currentNode = m_currentNode->getYes();
 	}
 	else
 	{
-		cout << "El clear() ha fallat en algun lloc" << endl;
+		m_currentNode = m_currentNode->getNo();
+	}
+}
+
+void akinatorTree::saveNodes(Node* node, ostream& out)
+{
+	if (node != nullptr)
+	{
+		if (node->getIsQuestion())
+		{
+			out << "Q:" << node->getData() << endl;
+			saveNodes(node->getYes(), out);
+			saveNodes(node->getNo(), out);
+		}
+		else
+		{
+			out << "A:" << node->getData() << endl;
+		}
+	}
+}
+
+void akinatorTree::saveToFile(const string& filename)
+{
+	ofstream file;
+
+	file.open(filename);
+	
+	if (file.is_open())
+	{
+		saveNodes(m_root, file);
+		file.close();
+		cout << "L'arbre s'ha guardat correctament" << endl;
+	}
+	else
+	{
+		cout << "Hi ha algun probelama a l'hora de guardar l'arbre" << endl;
+	}
+}
+
+Node* akinatorTree::loadNodes(istream& in)
+{
+	string line;
+
+	if (getline(in, line))
+	{
+		bool isQuestion = (line.substr(0, 2) == "Q:");		// mira els dos primers elements
+		string data = line.substr(2);	  // agafa tota la linea menys els priemrs dos elements
+
+		Node* node = new Node(data, isQuestion);
+
+		if (isQuestion)
+		{
+			node->setYes(loadNodes(in));
+			node->setNo(loadNodes(in));
+		}
+
+		return node;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+void akinatorTree::loadFromFile(const string& filename)
+{
+	ifstream file;
+	file.open(filename);
+
+	if (file.is_open())
+	{
+		clear();
+		m_root = loadNodes(file);
+		m_currentNode = m_root;
+
+		file.close();
+		cout << "Informacio carregada amb exit" << endl;
+	}
+	else
+	{
+		cout << "Error al carregar la informacio" << endl;
+	}
+}
+
+void akinatorTree::learn(Node*& node) 
+{
+	if (!node->getIsQuestion()) 
+	{
+		cout << "He fallat! No coneixia aquest personatge... Quin es el personatge en el que estaves pensant?" << endl;
+		string newData;
+		getline(cin, newData);
+
+		cout << "Dona'm una pregunta que em permeti diferenciar entre " << node->getData() << " i " << newData << " : ";
+		string question;
+		getline(cin, question);
+
+		Node* newQuestion = new Node(question, true);
+
+		cout << "La resposta a '" << question << "' per " << newData << " es (1 = si, 0 = no): ";
+		bool answerYes;
+		cin >> answerYes;
+		cin.ignore();
+
+		Node* yesNode = new Node(newData, false);
+		Node* noNode = new Node(node->getData(), false);
+
+		if (answerYes == 1) 
+		{
+			newQuestion->setYes(yesNode);
+			newQuestion->setNo(noNode);
+		}
+		else 
+		{
+			newQuestion->setYes(noNode);
+			newQuestion->setNo(yesNode);
+		}
+
+		node = newQuestion;
 	}
 }

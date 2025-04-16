@@ -1,0 +1,5 @@
+Q:Es un pokemon?
+Q:Es un pokemon de tipus aigua?
+A:Mudkip
+A:Torterra
+A:Coco

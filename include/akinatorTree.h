@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include <string>
 #include "node.h"
 
 using namespace std;
@@ -18,8 +20,13 @@ public:
 	void saveNodes(Node* node, ostream& out);
 	Node* loadNodes(istream& in);
 	void playRound(Node*& currentNode);
-	Node* findNextNode(Node* currentNode, bool answer);
-	void askQuestion(Node* node);	//nomes es un cout
+	void findNextNode(bool answer);
+	void askQuestion(Node* node);
+
+	bool isCurrentLeaf();
+	void resetCurrentNode();
+	void moveToYes();
+	void moveToNo();
 
 	void print(Node* node, int spaces);
 	void printTree();
